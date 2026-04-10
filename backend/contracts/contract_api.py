@@ -1,7 +1,10 @@
-﻿"""
+import logging
+"""
 계약서 업로드 및 관리 API
 """
-import json`nimport logging
+import json
+import logging
+import logging`nimport logging
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
