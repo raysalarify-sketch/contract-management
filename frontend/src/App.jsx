@@ -84,7 +84,7 @@ function SimpleLoginPage({onLoginSuccess,onBack}){
     if(!name||!pin){setError("성함과 6자리 PIN을 입력하세요");return}
     setLoading(true);setError("");
     try{
-      const d=await api("/accounts/token/",{method:"POST",body:JSON.stringify({name,pin})});
+      const d=await api("/accounts/token/",{method:"POST",body:JSON.stringify({username:name,password:pin})});
       if(d?.token){localStorage.setItem("access_token",d.token.access);localStorage.setItem("refresh_token",d.token.refresh);onLoginSuccess()}
       else{setError(d?.error||"로그인에 실패했습니다")}
     }catch(e){setError("서버 연결 실패")}setLoading(false)
