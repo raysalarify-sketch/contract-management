@@ -1,4 +1,4 @@
-"""
+﻿"""
 워크드 안전거래 플랫폼 - Django Settings
 """
 import os
@@ -101,7 +101,7 @@ SIMPLE_JWT = {
 
 # CORS
 CORS_ALLOWED_ORIGINS = os.environ.get(
-    'CORS_ORIGINS', 'http://localhost:3000,http://localhost:5173'
+    'CORS_ORIGINS', 'http://localhost:3000,http://localhost:5173,https://contract-platform-final.vercel.app'
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
