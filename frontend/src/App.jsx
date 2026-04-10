@@ -84,7 +84,7 @@ function SimpleLoginPage({onLoginSuccess,onBack}){
     if(!name||!pin){setError("성함과 6자리 PIN을 입력하세요");return}
     setLoading(true);setError("");
     try{
-      const d=await api("/accounts/token/",{method:"POST",body:JSON.stringify({username:name,password:pin})});
+      const d=await api("/accounts/simple-login/",{method:"POST",body:JSON.stringify({name,pin})});
       if(d?.token){localStorage.setItem("access_token",d.token.access);localStorage.setItem("refresh_token",d.token.refresh);onLoginSuccess()}
       else{setError(d?.error||"로그인에 실패했습니다")}
     }catch(e){setError("서버 연결 실패")}setLoading(false)
@@ -178,8 +178,8 @@ function PhoneLoginPage({contractData,onLoginSuccess}){
   const[loading,setLoading]=useState(false);const[error,setError]=useState("");
   useEffect(()=>{doLogin()},[]);
   const doLogin=async()=>{setLoading(true);const ph=contractData.tenantPhone.replace(/-/g,"");const nm=contractData.tenantName;
-    try{let d=await api("/accounts/token/",{method:"POST",body:JSON.stringify({username:ph,password:ph})}).catch(()=>null);
-      if(!d?.access){await api("/accounts/register/",{method:"POST",body:JSON.stringify({username:ph,password:ph,password_confirm:ph,first_name:nm.slice(1)||nm,last_name:nm[0]||"",phone:contractData.tenantPhone,role:"tenant"})}).catch(()=>{});d=await api("/accounts/token/",{method:"POST",body:JSON.stringify({username:ph,password:ph})}).catch(()=>null)}
+    try{let d=await api("/accounts/simple-login/",{method:"POST",body:JSON.stringify({username:ph,password:ph})}).catch(()=>null);
+      if(!d?.access){await api("/accounts/register/",{method:"POST",body:JSON.stringify({username:ph,password:ph,password_confirm:ph,first_name:nm.slice(1)||nm,last_name:nm[0]||"",phone:contractData.tenantPhone,role:"tenant"})}).catch(()=>{});d=await api("/accounts/simple-login/",{method:"POST",body:JSON.stringify({username:ph,password:ph})}).catch(()=>null)}
       if(d?.access){localStorage.setItem("access_token",d.access);localStorage.setItem("refresh_token",d.refresh);await api("/contracts/register-contract/",{method:"POST",body:JSON.stringify({contract_type:contractData.contractType,deposit:contractData.deposit,monthly_rent:contractData.monthlyRent||0,rent_day:contractData.rentDay||25,start_date:contractData.startDate,end_date:contractData.endDate,address:contractData.address,landlord_name:contractData.landlordName,landlord_phone:contractData.landlordPhone,landlord_bank:contractData.landlordBank||"",landlord_account:contractData.landlordAccount||""})}).catch(()=>{});onLoginSuccess()}
       else{setError("로그인에 실패했습니다")}
     }catch(e){setError("서버 연결에 실패했습니다")}setLoading(false)};
